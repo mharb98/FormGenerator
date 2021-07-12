@@ -9,7 +9,10 @@ import Form from "../components/Form";
 export default (
   <Router>
     <Switch>
-          <Route exact path="/" component={Form} />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/profile" component={Profile} />
+          <Route path = "/form/:formName" component={Form} />
     </Switch>
   </Router>
 );

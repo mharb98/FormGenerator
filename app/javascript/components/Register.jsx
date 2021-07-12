@@ -3,14 +3,54 @@ import InputEmail from './InputEmail';
 import InputPassword from './InputPassword';
 
 class Register extends Component{
-   changeHandler = e => {
+    constructor(props) {
+        super(props);
+        this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+    }
+   
+    stripHtmlEntities(str) {
+        return String(str)
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+    }
+
+    changeHandler = e => {
         this.setState({[e.target.name] : e.target.value })
-   }
+    }
 
    submitHandler = e => {
         e.preventDefault()
         let currState = this.state
-        alert(currState['email'] + '-' + currState['password'])
+        const url = "/api/v1/users/create";
+        const { email, password } = currState;
+
+        if(email.lenth == 0 || password.lenth == 0)
+            return;
+
+        const body = {
+            email,
+            password
+        };
+          
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRF-Token": token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+                throw new Error("Network response was not ok.");
+            })
+            .then(console.log('User created'))
+            .catch(error => console.log(error.message)
+        );
+        
         //window.location.href = "/";
     }
 

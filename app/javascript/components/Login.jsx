@@ -11,20 +11,24 @@ class Login extends Component{
         e.preventDefault()
         let currState = this.state
         alert(currState['email'] + '-' + currState['password'])
-        //window.location.href = "/profile";
+        window.location.href = "/profile";
+    }
+
+    redirectFunc = e => {
+        window.location.href = "/register";
     }
 
    render() {
        return (
         <div className="container">
             <h1>Login to generate your own forms</h1>
-             <form action="#" method="POST" onSubmit={this.submitHandler}>
+             <form action="#" method="GET" onSubmit={this.submitHandler}>
                  <InputEmail name={'email'} id={'email'} func={this.changeHandler}/>
                  <InputPassword name={'password'} id={'password'} func={this.changeHandler}/>
                  <input type="submit" value="Login" />
              </form>
              <br></br>
-             <a href="/register">Create your account!</a>
+             <a onClick={this.redirectFunc} href="#">Create your account!</a>
         </div>
        );
    }

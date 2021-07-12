@@ -10,26 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_11_234759) do
+ActiveRecord::Schema.define(version: 2021_07_12_124433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "forms", force: :cascade do |t|
-    t.string "formTitle"
-    t.string "path"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_forms_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
-    t.string "email"
-    t.string "password"
+    t.text "email"
+    t.text "password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "forms", "users"
 end
