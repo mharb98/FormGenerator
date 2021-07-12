@@ -3,12 +3,55 @@ import InputImage  from './InputImage';
 import InputText from './InputText';
 import TextArea from './TextArea';
 import CheckBox from './CheckBox';
+import { type } from 'jquery';
 
 class Profile extends Component{
   submitHandler = e => {
     e.preventDefault()
     let currState = this.state
-    //window.location.href = "/form/"+currState['formTitle'];
+    console.log(currState)
+    const url = "/api/v1/forms/create";
+    const { formTitle, files, description, emailBox, jobTitleBox, bestTimeBox, propertyTypeBox} = currState;    
+
+    if(formTitle.length == 0 || description.length == 0)
+       return;
+
+    const img = files
+    const email = emailBox === 'on' ? 'on' : 'off'
+    const jobTitle = jobTitleBox === 'on' ? 'on' : 'off'
+    const bestTime = bestTimeBox === 'on' ? 'on' : 'off'
+    const propertyType = propertyTypeBox === 'on' ? 'on' : 'off'
+
+    const body = {
+      formTitle,
+      img,
+      description,
+      email,
+      jobTitle,
+      bestTime,
+      propertyType
+    };
+          
+    const token = document.querySelector('meta[name="csrf-token"]').content;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json"
+    },
+      body: JSON.stringify(body)
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+        throw new Error("Network response was not ok.");
+      })
+      .then(console.log('Form created'))
+      .catch(error => console.log(error.message)
+    );
+        
+    //window.location.href = "/";
   }
   
   changeHandler = e => {
@@ -17,7 +60,7 @@ class Profile extends Component{
 
   changeFileState = e => {
     let files = e.target.files;
-    this.setState({ files: files[0] }, () => { console.log(this.state.files) })
+    this.setState({ files: files[0]['name'] }, () => { console.log(this.state.files) })
   }
 
   render (){
@@ -35,10 +78,10 @@ class Profile extends Component{
 
                     <fieldset>
                         <legend><label>Optional Data</label></legend>
-                            <CheckBox name={'email'} func={this.changeHandler} label={'Email'}/>
-                            <CheckBox name={'jobTitle'} func={this.changeHandler} label={'Job Title'}/>
-                            <CheckBox name={'bestTime'} func={this.changeHandler} label={'Best Time To Call'}/>
-                            <CheckBox name={'propertyType'} func={this.changeHandler} label={'Propertt Type'}/>
+                            <CheckBox name={'emailBox'} func={this.changeHandler} label={'Email'}/>
+                            <CheckBox name={'jobTitleBox'} func={this.changeHandler} label={'Job Title'}/>
+                            <CheckBox name={'bestTimeBox'} func={this.changeHandler} label={'Best Time To Call'}/>
+                            <CheckBox name={'propertyTypeBox'} func={this.changeHandler} label={'Propertt Type'}/>
                     </fieldset>             <br></br>
                     <input type="submit" value="Create Form" />
                 </form>
