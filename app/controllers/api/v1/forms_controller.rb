@@ -33,7 +33,7 @@ class Api::V1::FormsController < ApplicationController
   end
 
   def form
-    @form ||= Form.find(params[:id])
+    @form ||= Form.where({'formTitle' => params[:formTitle]})
   end
 
 end

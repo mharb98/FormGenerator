@@ -10,8 +10,16 @@ class Login extends Component{
    submitHandler = e => {
         e.preventDefault()
         let currState = this.state
-        alert(currState['email'] + '-' + currState['password'])
-        window.location.href = "/profile";
+        const url = "/api/v1/users/show";
+        const { email, password } = currState;
+
+        if(email.lenth == 0 || password.lenth == 0)
+            return;
+
+        const body = {
+            email,
+            password
+        };
     }
 
     redirectFunc = e => {

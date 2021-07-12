@@ -6,31 +6,36 @@ import InputEmail from './InputEmail';
 class Form extends Component{
     constructor(){
         super();
-        this.checkAttribute = this.checkAttribute.bind(this);
-        this.jObj = {
-            formTitle : 'Marwan',
-            description : 'We have multiple properties available in new Cairo, fill the form below to know the available options',
-            email : 'on',
-            jobTitle : 'on',
-            bestTime : 'on',
-            propertyType : 'on'
-        }
+
+        let curr_url = window.location.href;
+
+        let arr = curr_url.split('/');
+
+        this.formTitle = arr[arr.length - 1];
+
+        this.state = { jObj: []}
     }
 
-    checkAttribute(attribute){
-        let ret = false;
+    componentDidMount() {
+        const url = `/api/v1/forms/show/${this.formTitle}`;
 
-        if(this.jObj[attribute] == 'on'){
-            ret = true;
-        }
+        fetch(url)
 
-        return ret;
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error("Network response was not ok.");
+          })
+          .then(response => this.setState({ jObj: response[0]  }))
+          .catch(() => this.props.history.push("/")
+        );
     }
 
     submitHandler = e => {
         e.preventDefault()
         let currState = this.state
-        console.log(currState)
+        alert(currState)
       }
 
     changeHandler = e => {
@@ -38,58 +43,32 @@ class Form extends Component{
       }
 
     render(){
-        let checkEmail = this.checkAttribute('email');
-        let checkJobTitle = this.checkAttribute('jobTitle');
-        let checkBestTime = this.checkAttribute('bestTime');
-        let propertyType = this.checkAttribute('propertyType');
-
-        let em = <></>;
-        let jt = <></>;
-        let bt = <></>;
-        let fs = <></>;
-
-        if(checkEmail){
-            em = <InputEmail name={'email'} id={'email'} func = {this.changeHandler}/>;
-        }
-
-        if(checkJobTitle){
-            jt = <InputText name={'jt'} id={'jt'} placeHolder = {'Enter your job title...'} func = {this.changeHandler}/>
-        }
-
-        if(checkBestTime){
-            bt = <InputText name={'bt'} id={'bt'} placeHolder = {'Enter the best time to call'} func = {this.changeHandler}/>
-        }
-
-        if(propertyType){
-            fs = <fieldset>
-                        <legend><label>Property Type</label></legend>
-                            <CheckBox name={'apartment'} func={this.changeHandler} label={'Apartment'}/>
-                            <CheckBox name={'villa'} func={this.changeHandler} label={'Villa'}/>
-                            <CheckBox name={'townhouse'} func={this.changeHandler} label={'TownHouse'}/>
-                            <CheckBox name={'twinhouse'} func={this.changeHandler} label={'TwinHouse'}/>
-                    </fieldset>;      
-        }
-
         return (
             <div>
             <div className="container">
-                <h1 id='h'>{this.jObj['formTitle']}</h1>
+                <h1 id='h'>{this.state.jObj['formTitle']}</h1>
                 <form action="#" method="POST" onSubmit={this.submitHandler}>
 
-                    <h5>{this.jObj['description']}</h5>
+                    <h5>{this.state.jObj['description']}</h5>
 
                     <InputText name={'name'} id={'name'} placeHolder={'Enter your username...'} func={this.changeHandler} />
 
                     <InputText name={'phone'} id={'phone'} placeHolder={'Enter your phone number...'} func={this.changeHandler} />
 
-                    {em}
+                    {this.state.jObj['email'] === 'on' ? <InputEmail name={'email'} id={'email'} func = {this.changeHandler}/> : <></>}
 
-                    {jt}
-                    
-                    {bt}
+                    {this.state.jObj['jobTitle'] === 'on' ? <InputText name={'jt'} id={'jt'} placeHolder = {'Enter your job title...'} func = {this.changeHandler}/> : <></>}
 
-                    {fs}
-                    
+                    {this.state.jObj['bestTime'] === 'on' ? <InputText name={'bt'} id={'bt'} placeHolder = {'Enter the best time to call'} func = {this.changeHandler}/> : <></>}
+
+                    {this.state.jObj['propertyType'] === 'on' ? <fieldset>
+                        <legend><label>Property Type</label></legend>
+                            <CheckBox name={'apartment'} func={this.changeHandler} label={'Apartment'}/>
+                            <CheckBox name={'villa'} func={this.changeHandler} label={'Villa'}/>
+                            <CheckBox name={'townhouse'} func={this.changeHandler} label={'TownHouse'}/>
+                            <CheckBox name={'twinhouse'} func={this.changeHandler} label={'TwinHouse'}/>
+                    </fieldset> :<></>} 
+
                     <br></br>
 
                     <input type="submit" value="Submit" />

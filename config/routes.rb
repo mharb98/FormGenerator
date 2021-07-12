@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'forms/index'
       post 'forms/create'
-      get 'forms/show/:id', to: 'forms#show'
+      get 'forms/show/:formTitle', to: 'forms#show'
       get 'forms/destroy/:id', to: 'forms#destroy'
     end
   end
