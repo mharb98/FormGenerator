@@ -10,7 +10,7 @@ class Login extends Component{
    submitHandler = e => {
         e.preventDefault()
         let currState = this.state
-        const url = "/api/v1/users/show";
+        const url = "/api/v1/users/checkUser";
         const { email, password } = currState;
 
         if(email.lenth == 0 || password.lenth == 0)
@@ -20,6 +20,28 @@ class Login extends Component{
             email,
             password
         };
+
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRF-Token": token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+                throw new Error("Network response was not ok.");
+            })
+            .then(response => (response.message == true ? window.location.href = "/profile" : alert('Wrong Credenetials!')))
+            .catch(error => console.log(error.message)
+        );
+
+        //window.location.href = "/profile";
     }
 
     redirectFunc = e => {

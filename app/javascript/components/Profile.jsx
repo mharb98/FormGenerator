@@ -76,13 +76,16 @@ class Profile extends Component{
 
                     <TextArea placeHolder = {'Description'} name={'description'} id={'description'} func={this.changeHandler} />
 
+                    <div id="fs">
                     <fieldset>
                         <legend><label>Optional Data</label></legend>
                             <CheckBox name={'emailBox'} func={this.changeHandler} label={'Email'}/>
                             <CheckBox name={'jobTitleBox'} func={this.changeHandler} label={'Job Title'}/>
                             <CheckBox name={'bestTimeBox'} func={this.changeHandler} label={'Best Time To Call'}/>
                             <CheckBox name={'propertyTypeBox'} func={this.changeHandler} label={'Propertt Type'}/>
-                    </fieldset>             <br></br>
+                    </fieldset> 
+                    </div>
+                    <br></br>
                     <input type="submit" value="Create Form" />
                 </form>
             </div>

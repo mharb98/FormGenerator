@@ -11,8 +11,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'users/index'
       post 'users/create'
-      get 'users/show/:id', to: 'users#show'
+      get 'users/show', to: 'users#show'
       get 'users/destroy/:id', to: 'users#destroy'
+      post 'users/checkUser', to: 'users#checkUser'
     end
   end
 

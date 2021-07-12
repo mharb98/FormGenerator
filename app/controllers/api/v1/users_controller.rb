@@ -26,6 +26,14 @@ class Api::V1::UsersController < ApplicationController
     render json: { message: 'User deleted!' }
   end
 
+  def checkUser
+    if check
+      render json: {message: true}
+    else
+      render json: {message: false}
+    end
+  end
+
   private
 
   def user_params
@@ -34,5 +42,14 @@ class Api::V1::UsersController < ApplicationController
 
   def user
     @user ||= User.find(params[:id])
+  end
+
+  def check
+    user = User.where('email': params[:email], 'password': params[:password])
+    if user.size > 0
+      return true
+    else 
+      return false
+    end
   end
 end

@@ -34,8 +34,7 @@ class Form extends Component{
 
     submitHandler = e => {
         e.preventDefault()
-        let currState = this.state
-        alert(currState)
+        alert(this.state)
       }
 
     changeHandler = e => {
@@ -61,13 +60,13 @@ class Form extends Component{
 
                     {this.state.jObj['bestTime'] === 'on' ? <InputText name={'bt'} id={'bt'} placeHolder = {'Enter the best time to call'} func = {this.changeHandler}/> : <></>}
 
-                    {this.state.jObj['propertyType'] === 'on' ? <fieldset>
+                    {this.state.jObj['propertyType'] === 'on' ?<div id="fs"> <fieldset>
                         <legend><label>Property Type</label></legend>
                             <CheckBox name={'apartment'} func={this.changeHandler} label={'Apartment'}/>
                             <CheckBox name={'villa'} func={this.changeHandler} label={'Villa'}/>
                             <CheckBox name={'townhouse'} func={this.changeHandler} label={'TownHouse'}/>
                             <CheckBox name={'twinhouse'} func={this.changeHandler} label={'TwinHouse'}/>
-                    </fieldset> :<></>} 
+                    </fieldset></div> :<></>} 
 
                     <br></br>
 
